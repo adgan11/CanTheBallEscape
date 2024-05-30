@@ -1,0 +1,73 @@
+[gd_scene load_steps=6 format=3 uid="uid://cdjudtnmbgjf8"]
+
+[ext_resource type="Texture2D" uid="uid://cmnk8dyo21ysk" path="res://assets/plane-circle.svg" id="1_jpqmd"]
+[ext_resource type="AudioStream" uid="uid://bqrqsbtb5oey" path="res://assets/melody (1).wav" id="2_8is10"]
+[ext_resource type="AudioStream" uid="uid://do5y31kd36qtj" path="res://assets/bass (1).wav" id="3_lvfwp"]
+
+[sub_resource type="GDScript" id="GDScript_odmxj"]
+resource_name = "res://Scripts/ball.gd"
+script/source = "extends CharacterBody2D
+
+var speed = 750
+var bounce_strength = 0.95
+var played = false
+var once = false
+
+func _ready():
+    velocity = Vector2(1, -1).normalized() * speed
+
+func _physics_process(delta):
+    velocity.y += 500 * delta
+    
+    var collision = move_and_collide(velocity * delta)
+    if collision:
+        self.scale += Vector2(0.009, 0.009)
+        if velocity.x >= 50 or velocity.y >= 50:
+            velocity = velocity.bounce(collision.get_normal()) * bounce_strength
+        else:
+            velocity = velocity.bounce(collision.get_normal()) * 1
+        if not played:
+            $melody.play()
+            $base.play()
+            played = true
+        else:
+            $melody.stream_paused = false
+            $base.stream_paused = false
+        if not once:
+            $Timer.start()
+            once = true
+
+func _on_timer_timeout():
+    print(\"here\")
+    $melody.stream_paused = true
+    $base.stream_paused = true
+    once = false
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dij6s"]
+radius = 31.257
+
+[node name="Ball" type="CharacterBody2D"]
+scale = Vector2(0.3, 0.3)
+script = SubResource("GDScript_odmxj")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_jpqmd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_dij6s")
+
+[node name="melody" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_8is10")
+
+[node name="base" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_lvfwp")
+
+[node name="base2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_lvfwp")
+autoplay = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

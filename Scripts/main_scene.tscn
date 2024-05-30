@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://jecw6brk3wtn"]
+
+[ext_resource type="PackedScene" uid="uid://dn7etcwhk53fa" path="res://Scripts/outer_shape.tscn" id="1_5ckxc"]
+[ext_resource type="PackedScene" uid="uid://cdjudtnmbgjf8" path="res://Scripts/ball.tscn" id="2_bbhc5"]
+
+[sub_resource type="GDScript" id="GDScript_6bibm"]
+resource_name = "res://Scripts/main_script.gd"
+script/source = "extends Node2D
+
+@export var colors = [Color.GREEN, Color.RED, Color.YELLOW, Color.PINK]
+"
+
+[node name="MainScene" type="Node2D"]
+script = SubResource("GDScript_6bibm")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 32.0
+offset_top = 56.0
+offset_right = 615.0
+offset_bottom = 377.0
+theme_override_font_sizes/font_size = 76
+text = "Like if you think 
+the ball will 
+escape"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 32.0
+offset_top = 280.0
+offset_right = 615.0
+offset_bottom = 601.0
+theme_override_font_sizes/font_size = 22
+text = "Ball Size: 00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OuterShape" parent="." instance=ExtResource("1_5ckxc")]
+position = Vector2(324, 808)
+
+[node name="OuterShape2" parent="." instance=ExtResource("1_5ckxc")]
+position = Vector2(324, 808)
+scale = Vector2(0.8, 0.8)
+
+[node name="OuterShape3" parent="." instance=ExtResource("1_5ckxc")]
+position = Vector2(324, 808)
+scale = Vector2(0.6, 0.6)
+
+[node name="OuterShape4" parent="." instance=ExtResource("1_5ckxc")]
+position = Vector2(324, 808)
+scale = Vector2(0.4, 0.4)
+
+[node name="Ball" parent="." instance=ExtResource("2_bbhc5")]
+position = Vector2(324, 756.61)
